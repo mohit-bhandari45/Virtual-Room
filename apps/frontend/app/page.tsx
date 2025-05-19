@@ -4,7 +4,7 @@ import React from 'react'
 const Main = () => {
   return (
     <div>
-      <Button>Main is good</Button>
+      <Button>Main</Button>
     </div>
   )
 }
