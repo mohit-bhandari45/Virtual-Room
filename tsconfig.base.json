@@ -1,0 +1,25 @@
+// tsconfig.base.json
+{
+    "compilerOptions": {
+        "target": "ES2021",
+        "module": "ESNext",
+        "lib": [
+            "DOM",
+            "ESNext"
+        ],
+        "moduleResolution": "Node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "paths": {
+            "types": [
+                "packages/types/src"
+            ]
+        }
+    }
+}
