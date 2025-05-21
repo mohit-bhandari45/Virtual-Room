@@ -1,10 +1,14 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "dist",
     "rootDir": "src",
     "module": "ESNext",
-    "esModuleInterop": true          // Also inherited
+    "esModuleInterop": true, // Also inherited
+    "paths": {
+      "@/*":["src/*"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "../../packages/types" }]
