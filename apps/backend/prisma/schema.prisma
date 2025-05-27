@@ -8,10 +8,11 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())    // faster when integer
-  email     String   @unique
-  name      String?
-  username  String?  @unique
-  password  String
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())    // faster when integer
+  name        String?
+  username    String?  @unique
+  email       String   @unique
+  password    String
+  avatarURL   String?
+  createdAt   DateTime @default(now())
 }

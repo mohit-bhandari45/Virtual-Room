@@ -1,4 +1,4 @@
-import { IResponse } from "@/types/general";
+import { IResponse } from "@virtualroom/types";
 import { Request, Response } from "express";
 import { prisma } from "@/lib/db";
 import { encode } from "@/utils/jwt";
@@ -49,7 +49,6 @@ async function signUpHandler(req: Request, res: Response): Promise<void> {
         response.msg = "Signed in Successfully";
         response.token = token;
         res.status(201).json(response);
-        return;
     } catch (error: unknown) {
         console.log(error);
         response.error = error as Error;
@@ -91,7 +90,6 @@ async function loginHandler(req: Request, res: Response): Promise<void> {
         response.msg = "Logged in Successfully";
         response.token = token;
         res.status(201).json(response);
-        return;
     } catch (error) {
         console.log(error);
         response.error = error as Error;

@@ -25,7 +25,8 @@
     "prettier": "^3.5.3",
     "prisma": "^6.8.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "@virtualroom/types": "*"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
