@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import express from "express";
-import authRoutes from "@/routes/auth";
+import authRouter from "@/routes/auth";
+import apiRouter from "@/routes/apis";
+import cors from "cors";
 
 dotenv.config();
 
@@ -9,7 +11,9 @@ const app = express();
 
 /* Routes */
 app.use(express.json());
+app.use(cors());
 
-app.use("/auth", authRoutes);
+app.use("/auth", authRouter);
+app.use("/api", apiRouter);
 
 export default app;

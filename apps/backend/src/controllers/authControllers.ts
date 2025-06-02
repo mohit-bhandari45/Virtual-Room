@@ -52,8 +52,8 @@ async function signUpHandler(req: Request, res: Response): Promise<void> {
     } catch (error: unknown) {
         console.log(error);
         response.error = error as Error;
-        response.msg = "Internal Server Error";
-        res.status(500).json();
+        response.msg = "Internal Server Error. Please Try Again!";
+        res.status(500).json(response);
     }
 }
 
@@ -94,7 +94,7 @@ async function loginHandler(req: Request, res: Response): Promise<void> {
         console.log(error);
         response.error = error as Error;
         response.msg = "Internal Server Error";
-        res.status(500).json();
+        res.status(500).json(response);
     }
 }
 

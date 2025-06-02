@@ -8,11 +8,37 @@ generator client {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())    // faster when integer
+  id          String      @id @default(uuid())    // faster when integer
   name        String?
   username    String?  @unique
   email       String   @unique
   password    String
   avatarURL   String?
   createdAt   DateTime @default(now())
+
+  roomsCreated  Room[] @relation("RoomCreator")
+  roomParticipants RoomParticipant[]
+}
+
+model Room{
+  id String @id @default(uuid())
+  name String
+  description String
+  createdById String
+  createdBy User @relation("RoomCreator", fields: [createdById], references: [id])
+  createdAt DateTime @default(now())
+
+  roomParticipants RoomParticipant[]
+}
+
+model RoomParticipant{
+  id String @id @default(uuid())
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  role String @default("member")
+  joinedAt DateTime @default(now())
+
+  @@unique([roomId, userId])
 }

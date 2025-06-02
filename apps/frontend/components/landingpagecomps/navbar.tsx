@@ -3,6 +3,7 @@
 import { Video } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import FloatingCard from "./FloatingCard";
+import { useRouter } from "next/navigation";
 
 interface NavbarProps {
   isVisible: boolean;
@@ -10,6 +11,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({ isVisible, setIsVisible }: NavbarProps) => {
+  const router = useRouter();
   const [, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
@@ -51,8 +53,10 @@ const Navbar = ({ isVisible, setIsVisible }: NavbarProps) => {
           >
             About
           </a>
-          <button className="bg-white text-black px-4 py-2 rounded-full hover:bg-gray-200 transition-all transform hover:scale-105">
-            Sign In
+          <button onClick={()=>{
+            router.push("/auth/signup")
+          }} className="bg-white cursor-pointer text-black px-4 py-2 rounded-full hover:bg-gray-200 transition-all transform hover:scale-105">
+            Sign Up
           </button>
         </div>
       </nav>

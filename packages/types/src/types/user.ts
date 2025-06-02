@@ -2,7 +2,7 @@ interface IUser {
     name: string | null;
     email: string;
     password: string;
-    id: number;
+    id: string;
     username: string | null;
     createdAt: Date;
 }
