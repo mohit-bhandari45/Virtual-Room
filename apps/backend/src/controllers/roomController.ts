@@ -50,4 +50,35 @@ async function createRoomHandler(req: Request, res: Response): Promise<void> {
     }
 }
 
-export { createRoomHandler };
+async function getAllRoomsHandler(req: Request, res: Response): Promise<void> {
+    const userId = req.user?.id;
+    let response: IResponse = {
+        msg: ""
+    };
+
+    if (!userId) {
+        response.msg = "Unauthorized!";
+        res.status(401).json(response);
+        return;
+    }
+
+    try {
+        const rooms = await prisma.room.findMany({
+            where: {
+                createdById: userId,
+            },
+        });
+
+        const allRooms = rooms ?? [];
+        response.msg = "Got All rooms";
+        response.data = allRooms;
+        res.status(200).json(response);
+        return;
+    } catch (error) {
+        response.msg = "Internal Server Error. Please try again!";
+        response.error = error as Error;
+        res.status(500).json(response);
+    }
+}
+
+export { createRoomHandler, getAllRoomsHandler };
