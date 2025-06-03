@@ -12,11 +12,11 @@ import { LOGIN_API } from "@/api/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import MainLoader from "@/components/mainLoader";
+import { useAppContext } from "@/context/AppContext";
 
 const LoginPage = () => {
   const router = useRouter();
-  const [loader, setLoader] = useState(false);
-  const [mainLoader, setMainLoader] = useState(false);
+  const { loader, setLoader, mainLoader, setMainLoader } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -43,6 +43,7 @@ const LoginPage = () => {
       const response = await axios.post(LOGIN_API, data);
       if (response.status == 200) {
         const { msg, token } = response.data;
+        console.log(msg, token);
         localStorage.setItem("token", token);
         toast.success(msg);
       }
@@ -193,8 +194,8 @@ const LoginPage = () => {
             >
               {loader ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
                   Signing In!
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
                 </>
               ) : (
                 <>

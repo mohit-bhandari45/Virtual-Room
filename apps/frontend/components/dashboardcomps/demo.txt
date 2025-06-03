@@ -1,0 +1,283 @@
+{/* Content */}
+          <main className="flex-1 overflow-auto p-6">
+            {activeTab === "overview" && (
+              <div className="space-y-6">
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {stats.map((stat, index) => {
+                    const Icon = stat.icon;
+                    return (
+                      <Card
+                        key={index}
+                        className="bg-white/5 backdrop-blur-xl border-white/10"
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm text-gray-400">
+                                {stat.label}
+                              </p>
+                              <p className="text-2xl font-bold mt-1">
+                                {stat.value}
+                              </p>
+                              <p className="text-sm text-green-400 mt-1">
+                                {stat.change} from last week
+                              </p>
+                            </div>
+                            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                              <Icon className="w-6 h-6" />
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+
+                {/* Quick Actions */}
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
+                  <CardHeader>
+                    <CardTitle>Quick Actions</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      Get started with these common tasks
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Button
+                        variant="outline"
+                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
+                      >
+                        <Video className="w-8 h-8" />
+                        <span>Create Meeting Room</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
+                      >
+                        <Calendar className="w-8 h-8" />
+                        <span>Schedule Room</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
+                      >
+                        <Users className="w-8 h-8" />
+                        <span>Invite Participants</span>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Rooms */}
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                      <CardTitle>Recent Rooms</CardTitle>
+                      <CardDescription className="text-gray-400">
+                        Your latest virtual room activities
+                      </CardDescription>
+                    </div>
+                    <Link href="/MainDashBoard/rooms">
+                      <Button
+                        variant="ghost"
+                        className="text-gray-400 hover:text-white"
+                      >
+                        View all
+                        <ChevronRight className="w-4 h-4 ml-1" />
+                      </Button>
+                    </Link>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {recentRooms.map((room) => (
+                        <div
+                          key={room.id}
+                          className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
+                        >
+                          <div className="flex items-center space-x-4">
+                            <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                              <Video className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-2">
+                                <h3 className="font-medium">{room.name}</h3>
+                                <Badge className={getStatusColor(room.status)}>
+                                  {room.status}
+                                </Badge>
+                                {room.isPublic ? (
+                                  <Globe className="w-4 h-4 text-gray-400" />
+                                ) : (
+                                  <Lock className="w-4 h-4 text-gray-400" />
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-4 text-sm text-gray-400 mt-1">
+                                <span className="flex items-center">
+                                  <Users className="w-4 h-4 mr-1" />
+                                  {room.participants} participants
+                                </span>
+                                <span>{room.created}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center space-x-2">
+                            {room.status === "active" ? (
+                              <Button
+                                size="sm"
+                                className="bg-green-500 hover:bg-green-600 text-white"
+                              >
+                                <Play className="w-4 h-4 mr-1" />
+                                Join
+                              </Button>
+                            ) : (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-white/20 text-white hover:bg-white/10"
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                View
+                              </Button>
+                            )}
+
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-gray-400 hover:text-white"
+                                >
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="bg-black/90 backdrop-blur-xl border-white/20">
+                                <DropdownMenuItem className="text-white hover:bg-white/10">
+                                  <Edit className="mr-2 h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-white hover:bg-white/10">
+                                  <Share2 className="mr-2 h-4 w-4" />
+                                  Share
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-white/20" />
+                                <DropdownMenuItem className="text-red-400 hover:bg-red-500/10">
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* {activeTab === "rooms" && (
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold">All Rooms</h2>
+                  <div className="flex items-center space-x-4">
+                    <Input
+                      placeholder="Filter rooms..."
+                      className="w-80 bg-white/5 border-white/20 text-white placeholder-gray-500"
+                    />
+                    <Button className="bg-white hover:bg-gray-100 text-black">
+                      <Plus className="w-4 h-4 mr-2" />
+                      New Room
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {recentRooms.map((room) => (
+                    <Card
+                      key={room.id}
+                      className="bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 transition-all"
+                    >
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                            <Video className="w-6 h-6" />
+                          </div>
+                          <Badge className={getStatusColor(room.status)}>
+                            {room.status}
+                          </Badge>
+                        </div>
+
+                        <h3 className="font-semibold text-lg mb-2">
+                          {room.name}
+                        </h3>
+
+                        <div className="space-y-2 text-sm text-gray-400 mb-4">
+                          <div className="flex items-center">
+                            <Users className="w-4 h-4 mr-2" />
+                            {room.participants} participants
+                          </div>
+                          <div className="flex items-center">
+                            <Clock className="w-4 h-4 mr-2" />
+                            Created {room.created}
+                          </div>
+                          <div className="flex items-center">
+                            {room.isPublic ? (
+                              <Globe className="w-4 h-4 mr-2" />
+                            ) : (
+                              <Lock className="w-4 h-4 mr-2" />
+                            )}
+                            {room.isPublic ? "Public" : "Private"}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                          {room.status === "active" ? (
+                            <Button
+                              size="sm"
+                              className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                            >
+                              <Play className="w-4 h-4 mr-1" />
+                              Join
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="flex-1 border-white/20 text-white hover:bg-white/10"
+                            >
+                              <Eye className="w-4 h-4 mr-1" />
+                              View
+                            </Button>
+                          )}
+
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="text-gray-400 hover:text-white"
+                          >
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )} */}
+
+            {/* Placeholder for other tabs */}
+            {/* {activeTab !== "overview" && activeTab !== "rooms" && (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                    <Settings className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Coming Soon</h3>
+                  <p className="text-gray-400">
+                    The {activeTab} section is under development.
+                  </p>
+                </div>
+              </div>
+            )} */}
+          </main>

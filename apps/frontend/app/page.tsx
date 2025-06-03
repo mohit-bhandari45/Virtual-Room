@@ -5,6 +5,9 @@ import Features from "@/components/landingpagecomps/features";
 import Footer from "@/components/landingpagecomps/footer";
 import HeroSection from "@/components/landingpagecomps/herosection";
 import Navbar from "@/components/landingpagecomps/navbar";
+import MainLoader from "@/components/mainLoader";
+import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface MousePosition {
@@ -20,11 +23,21 @@ interface GradientOrbProps {
 }
 
 const VirtualRoomLanding: React.FC = () => {
+  const router = useRouter();
+  const { mainLoader, setMainLoader } = useAppContext();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [mousePosition, setMousePosition] = useState<MousePosition>({
     x: 0,
     y: 0,
   });
+
+  useEffect(() => {
+    setMainLoader(true);
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router, setMainLoader]);
 
   useEffect(() => {
     setIsVisible(true);
@@ -55,6 +68,10 @@ const VirtualRoomLanding: React.FC = () => {
       }}
     />
   );
+
+  if (mainLoader) {
+    return <MainLoader msg={"Wait a min!"} />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden relative">

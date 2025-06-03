@@ -89,7 +89,7 @@ async function loginHandler(req: Request, res: Response): Promise<void> {
 
         response.msg = "Logged in Successfully";
         response.token = token;
-        res.status(201).json(response);
+        res.status(200).json(response);
     } catch (error) {
         console.log(error);
         response.error = error as Error;

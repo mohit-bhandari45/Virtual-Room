@@ -1,7 +1,17 @@
 "use client";
 
-import Sidebar from "@/components/dashboardcomps/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
+import MainLoader from "@/components/mainLoader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,502 +21,587 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
-  Bell,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { Textarea } from "@/components/ui/textarea";
+import useGetProfile from "@/hooks/useGetProfile";
+import {
   Calendar,
   ChevronRight,
   Clock,
   Edit,
-  Eye,
+  FileText,
+  Flame,
   Globe,
   Lock,
-  LogOut,
-  MoreHorizontal,
-  Play,
   Plus,
-  Search,
-  Settings,
-  Share2,
-  Sparkles,
+  Target,
   Trash2,
-  TrendingUp,
-  User,
   Users,
-  Video
+  Video,
 } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 
-const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [searchQuery, setSearchQuery] = useState("");
+export default function Page() {
+  const { loader, profile, error } = useGetProfile();
 
-  // Sample data
+  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
+  const [roomData, setRoomData] = useState({
+    name: "",
+    description: "",
+    date: "",
+    time: "",
+    participants: "",
+    type: "",
+    privacy: "public", // Default to public
+  });
+
+  const handleCreateRoom = () => {
+    // Handle room creation logic here
+    console.log("Creating room:", roomData);
+    // You can add API call here
+    setIsCreateRoomOpen(false);
+    // Reset form
+    setRoomData({
+      name: "",
+      description: "",
+      date: "",
+      time: "",
+      participants: "",
+      type: "",
+      privacy: "public",
+    });
+  };
+  // Mock data for demonstration
   const recentRooms = [
     {
-      id: "1",
+      id: 1,
       name: "Team Standup",
-      participants: 8,
-      status: "active",
-      created: "2 hours ago",
-      type: "meeting",
-      isPublic: false,
-    },
-    {
-      id: "2",
-      name: "Product Demo",
-      participants: 15,
-      status: "scheduled",
-      created: "1 day ago",
-      type: "presentation",
-      isPublic: true,
-    },
-    {
-      id: "3",
-      name: "Code Review Session",
+      description: "Daily sync meeting",
+      date: "Today",
+      time: "9:00 AM",
       participants: 5,
-      status: "ended",
-      created: "3 days ago",
-      type: "collaboration",
-      isPublic: false,
+      status: "upcoming",
+      tag: "Today",
     },
     {
-      id: "4",
-      name: "Client Meeting",
+      id: 2,
+      name: "Project Planning",
+      description: "Q4 roadmap discussion",
+      date: "Tomorrow",
+      time: "2:00 PM",
+      participants: 8,
+      status: "scheduled",
+      tag: "This Week",
+    },
+    {
+      id: 3,
+      name: "Code Review Session",
+      description: "Frontend components review",
+      date: "Dec 15",
+      time: "3:30 PM",
       participants: 3,
-      status: "active",
-      created: "1 hour ago",
-      type: "meeting",
-      isPublic: false,
+      status: "completed",
+      tag: "Past",
     },
   ];
 
-  const stats = [
-    { label: "Total Rooms", value: "24", change: "+12%", icon: Video },
-    { label: "Active Users", value: "156", change: "+8%", icon: Users },
-    { label: "Hours Hosted", value: "89", change: "+23%", icon: Clock },
-    { label: "This Week", value: "12", change: "+5%", icon: TrendingUp },
+  const recentActivity = [
+    "You joined Room 'Team Standup'",
+    "You spent 45 mins in Focus mode",
+    "You shared a file in Room 'Project Planning'",
+    "You completed a 2-hour focus session",
   ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "scheduled":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "ended":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
-  };
+  const sharedResources = [
+    { name: "Design_System_v2.pdf", room: "Team Standup", date: "2 hours ago" },
+    { name: "Q4_Roadmap.docx", room: "Project Planning", date: "1 day ago" },
+    { name: "Whiteboard_Notes.png", room: "Code Review", date: "3 days ago" },
+  ];
+
+  const upcomingEvents = [
+    { date: "Today", time: "9:00 AM", title: "Team Standup" },
+    { date: "Tomorrow", time: "2:00 PM", title: "Project Planning" },
+    { date: "Dec 18", time: "10:00 AM", title: "Client Review" },
+  ];
+
+  if (loader) {
+    return <MainLoader msg={"Wait a min!"} />;
+  }
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
+    <SidebarProvider>
+      <AppSidebar profile={profile}/>
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+          <div className="flex items-center gap-2 px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="hidden md:block">
+                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Overview</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
+        </header>
 
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/10 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 flex h-screen">
-        {/* Sidebar */}
-        <div className="w-64 bg-white/5 backdrop-blur-xl border-r border-white/10 flex flex-col">
-          {/* Logo */}
-          <div className="p-6 border-b border-white/10">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-black" />
-              </div>
-              <span className="text-xl font-bold">VirtualRooms</span>
+        <div className="flex flex-1 flex-col gap-6 p-6 pt-0">
+          {/* Welcome Section & Create Room */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-3xl font-bold">Welcome back, {profile?.name}!</h1>
+              <p className="text-muted-foreground">
+                Here's what's happening with your rooms and sessions
+              </p>
             </div>
-          </div>
 
-          {/* Navigation */}
-          <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
-          {/* User Profile */}
-          <div className="p-4 border-t border-white/10">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="w-full flex items-center space-x-3 p-3 rounded-xl hover:bg-white/10 transition-all">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="text-sm font-medium">John Doe</div>
-                    <div className="text-xs text-gray-400">
-                      john@example.com
-                    </div>
-                  </div>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 bg-black/90 backdrop-blur-xl border-white/20">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-white/20" />
-                <DropdownMenuItem className="text-white hover:bg-white/10">
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-white hover:bg-white/10">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header */}
-          <header className="bg-white/5 backdrop-blur-xl border-b border-white/10 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold">Dashboard</h1>
-                <p className="text-gray-400 mt-1">
-                  Manage your virtual rooms and participants
-                </p>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                {/* Search */}
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                  <Input
-                    placeholder="Search rooms..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 w-80 bg-white/5 border-white/20 text-white placeholder-gray-500 focus:border-white/40"
-                  />
-                </div>
-
-                {/* Notifications */}
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="bg-white/5 border-white/20 text-white hover:bg-white/10"
-                >
-                  <Bell className="w-4 h-4" />
-                </Button>
-
-                {/* Create Room */}
-                <Button className="bg-white hover:bg-gray-100 text-black font-semibold">
-                  <Plus className="w-4 h-4 mr-2" />
+            {/* Create Room Dialog */}
+            <Dialog open={isCreateRoomOpen} onOpenChange={setIsCreateRoomOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" className="gap-2">
+                  <Plus className="h-4 w-4" />
                   Create Room
                 </Button>
-              </div>
-            </div>
-          </header>
-
-          {/* Content */}
-          <main className="flex-1 overflow-auto p-6">
-            {activeTab === "overview" && (
-              <div className="space-y-6">
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {stats.map((stat, index) => {
-                    const Icon = stat.icon;
-                    return (
-                      <Card
-                        key={index}
-                        className="bg-white/5 backdrop-blur-xl border-white/10"
-                      >
-                        <CardContent className="p-6">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-gray-400">
-                                {stat.label}
-                              </p>
-                              <p className="text-2xl font-bold mt-1">
-                                {stat.value}
-                              </p>
-                              <p className="text-sm text-green-400 mt-1">
-                                {stat.change} from last week
-                              </p>
-                            </div>
-                            <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                              <Icon className="w-6 h-6" />
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
-                </div>
-
-                {/* Quick Actions */}
-                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
-                  <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
-                    <CardDescription className="text-gray-400">
-                      Get started with these common tasks
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Button
-                        variant="outline"
-                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
-                      >
-                        <Video className="w-8 h-8" />
-                        <span>Create Meeting Room</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
-                      >
-                        <Calendar className="w-8 h-8" />
-                        <span>Schedule Room</span>
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="h-auto p-4 bg-white/5 border-white/20 text-white hover:bg-white/10 flex-col space-y-2"
-                      >
-                        <Users className="w-8 h-8" />
-                        <span>Invite Participants</span>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Recent Rooms */}
-                <Card className="bg-white/5 backdrop-blur-xl border-white/10">
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <div>
-                      <CardTitle>Recent Rooms</CardTitle>
-                      <CardDescription className="text-gray-400">
-                        Your latest virtual room activities
-                      </CardDescription>
-                    </div>
-                    <Link href="/dashboard/rooms">
-                      <Button
-                        variant="ghost"
-                        className="text-gray-400 hover:text-white"
-                      >
-                        View all
-                        <ChevronRight className="w-4 h-4 ml-1" />
-                      </Button>
-                    </Link>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {recentRooms.map((room) => (
-                        <div
-                          key={room.id}
-                          className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
-                              <Video className="w-5 h-5" />
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <h3 className="font-medium">{room.name}</h3>
-                                <Badge className={getStatusColor(room.status)}>
-                                  {room.status}
-                                </Badge>
-                                {room.isPublic ? (
-                                  <Globe className="w-4 h-4 text-gray-400" />
-                                ) : (
-                                  <Lock className="w-4 h-4 text-gray-400" />
-                                )}
-                              </div>
-                              <div className="flex items-center space-x-4 text-sm text-gray-400 mt-1">
-                                <span className="flex items-center">
-                                  <Users className="w-4 h-4 mr-1" />
-                                  {room.participants} participants
-                                </span>
-                                <span>{room.created}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex items-center space-x-2">
-                            {room.status === "active" ? (
-                              <Button
-                                size="sm"
-                                className="bg-green-500 hover:bg-green-600 text-white"
-                              >
-                                <Play className="w-4 h-4 mr-1" />
-                                Join
-                              </Button>
-                            ) : (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="border-white/20 text-white hover:bg-white/10"
-                              >
-                                <Eye className="w-4 h-4 mr-1" />
-                                View
-                              </Button>
-                            )}
-
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="text-gray-400 hover:text-white"
-                                >
-                                  <MoreHorizontal className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="bg-black/90 backdrop-blur-xl border-white/20">
-                                <DropdownMenuItem className="text-white hover:bg-white/10">
-                                  <Edit className="mr-2 h-4 w-4" />
-                                  Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-white hover:bg-white/10">
-                                  <Share2 className="mr-2 h-4 w-4" />
-                                  Share
-                                </DropdownMenuItem>
-                                <DropdownMenuSeparator className="bg-white/20" />
-                                <DropdownMenuItem className="text-red-400 hover:bg-red-500/10">
-                                  <Trash2 className="mr-2 h-4 w-4" />
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {activeTab === "rooms" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">All Rooms</h2>
-                  <div className="flex items-center space-x-4">
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Create New Room</DialogTitle>
+                  <DialogDescription>
+                    Set up a new room for collaboration, meetings, or focus
+                    sessions.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="room-name">Room Name *</Label>
                     <Input
-                      placeholder="Filter rooms..."
-                      className="w-80 bg-white/5 border-white/20 text-white placeholder-gray-500"
+                      id="room-name"
+                      placeholder="e.g., Team Standup, Focus Session"
+                      value={roomData.name}
+                      onChange={(e) =>
+                        setRoomData({ ...roomData, name: e.target.value })
+                      }
                     />
-                    <Button className="bg-white hover:bg-gray-100 text-black">
-                      <Plus className="w-4 h-4 mr-2" />
-                      New Room
-                    </Button>
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {recentRooms.map((room) => (
-                    <Card
-                      key={room.id}
-                      className="bg-white/5 backdrop-blur-xl border-white/10 hover:bg-white/10 transition-all"
+                  <div className="grid gap-2">
+                    <Label htmlFor="room-description">Description</Label>
+                    <Textarea
+                      id="room-description"
+                      placeholder="Brief description of the room purpose..."
+                      value={roomData.description}
+                      onChange={(e) =>
+                        setRoomData({
+                          ...roomData,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="room-date">Date</Label>
+                      <Input
+                        id="room-date"
+                        type="date"
+                        value={roomData.date}
+                        onChange={(e) =>
+                          setRoomData({ ...roomData, date: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="room-time">Time</Label>
+                      <Input
+                        id="room-time"
+                        type="time"
+                        value={roomData.time}
+                        onChange={(e) =>
+                          setRoomData({ ...roomData, time: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="room-type">Room Type</Label>
+                    <Select
+                      value={roomData.type}
+                      onValueChange={(value) =>
+                        setRoomData({ ...roomData, type: value })
+                      }
                     >
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
-                            <Video className="w-6 h-6" />
-                          </div>
-                          <Badge className={getStatusColor(room.status)}>
-                            {room.status}
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select room type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="meeting">Meeting Room</SelectItem>
+                        <SelectItem value="focus">Focus Session</SelectItem>
+                        <SelectItem value="collaboration">
+                          Collaboration Space
+                        </SelectItem>
+                        <SelectItem value="presentation">
+                          Presentation Room
+                        </SelectItem>
+                        <SelectItem value="workshop">Workshop</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Privacy Settings */}
+                  <div className="grid gap-3">
+                    <Label>Room Privacy</Label>
+                    <RadioGroup
+                      value={roomData.privacy}
+                      onValueChange={(value) =>
+                        setRoomData({ ...roomData, privacy: value })
+                      }
+                      className="grid grid-cols-2 gap-4"
+                    >
+                      <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                        <RadioGroupItem value="public" id="public" />
+                        <div className="flex-1">
+                          <Label
+                            htmlFor="public"
+                            className="flex items-center gap-2 font-medium cursor-pointer"
+                          >
+                            <Globe className="h-4 w-4 text-green-600" />
+                            Public Room
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Anyone can discover and join this room
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-muted/50 transition-colors">
+                        <RadioGroupItem value="private" id="private" />
+                        <div className="flex-1">
+                          <Label
+                            htmlFor="private"
+                            className="flex items-center gap-2 font-medium cursor-pointer"
+                          >
+                            <Lock className="h-4 w-4 text-orange-600" />
+                            Private Room
+                          </Label>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Only invited participants can join
+                          </p>
+                        </div>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  {/* <div className="grid gap-2">
+                    <Label htmlFor="participants">Invite Participants (Email addresses)</Label>
+                    <Input
+                      id="participants"
+                      placeholder="user1@example.com, user2@example.com"
+                      value={roomData.participants}
+                      onChange={(e) => setRoomData({...roomData, participants: e.target.value})}
+                    />
+                  </div> */}
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCreateRoomOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button onClick={handleCreateRoom} disabled={!roomData.name}>
+                    Create Room
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {/* Top Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Total Rooms
+                </CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">12</div>
+                <p className="text-xs text-muted-foreground">
+                  +2 from last week
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  Focus Time
+                </CardTitle>
+                <Target className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">24h</div>
+                <p className="text-xs text-muted-foreground">This week</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Streak</CardTitle>
+                <Flame className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">7</div>
+                <p className="text-xs text-muted-foreground">Days active</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Upcoming</CardTitle>
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">3</div>
+                <p className="text-xs text-muted-foreground">Sessions today</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Your Rooms / Sessions */}
+            <div className="lg:col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Video className="h-5 w-5" />
+                    Your Rooms / Sessions
+                  </CardTitle>
+                  <CardDescription>Recent and scheduled rooms</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {recentRooms.map((room) => (
+                    <div
+                      key={room.id}
+                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h4 className="font-semibold">{room.name}</h4>
+                          <Badge
+                            variant={
+                              room.tag === "Today"
+                                ? "default"
+                                : room.tag === "This Week"
+                                  ? "secondary"
+                                  : "outline"
+                            }
+                          >
+                            {room.tag}
                           </Badge>
                         </div>
-
-                        <h3 className="font-semibold text-lg mb-2">
-                          {room.name}
-                        </h3>
-
-                        <div className="space-y-2 text-sm text-gray-400 mb-4">
-                          <div className="flex items-center">
-                            <Users className="w-4 h-4 mr-2" />
+                        <p className="text-sm text-muted-foreground mb-1">
+                          {room.description}
+                        </p>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3 w-3" />
+                            {room.date} at {room.time}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Users className="h-3 w-3" />
                             {room.participants} participants
-                          </div>
-                          <div className="flex items-center">
-                            <Clock className="w-4 h-4 mr-2" />
-                            Created {room.created}
-                          </div>
-                          <div className="flex items-center">
-                            {room.isPublic ? (
-                              <Globe className="w-4 h-4 mr-2" />
-                            ) : (
-                              <Lock className="w-4 h-4 mr-2" />
-                            )}
-                            {room.isPublic ? "Public" : "Private"}
-                          </div>
+                          </span>
                         </div>
-
-                        <div className="flex items-center space-x-2">
-                          {room.status === "active" ? (
-                            <Button
-                              size="sm"
-                              className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-                            >
-                              <Play className="w-4 h-4 mr-1" />
-                              Join
-                            </Button>
-                          ) : (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="flex-1 border-white/20 text-white hover:bg-white/10"
-                            >
-                              <Eye className="w-4 h-4 mr-1" />
-                              View
-                            </Button>
-                          )}
-
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="text-gray-400 hover:text-white"
-                          >
-                            <MoreHorizontal className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm">
+                          {room.status === "upcoming"
+                            ? "Join"
+                            : room.status === "scheduled"
+                              ? "Edit"
+                              : "View"}
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
                   ))}
-                </div>
-              </div>
-            )}
+                  <Button variant="ghost" className="w-full justify-between">
+                    View all rooms
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Placeholder for other tabs */}
-            {activeTab !== "overview" && activeTab !== "rooms" && (
-              <div className="flex items-center justify-center h-64">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Settings className="w-8 h-8" />
+            {/* Calendar / Schedule & User Profile */}
+            <div className="space-y-6">
+              {/* User Profile Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Profile</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src="/placeholder-avatar.jpg" />
+                      <AvatarFallback>JD</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h4 className="font-semibold">John Doe</h4>
+                      <p className="text-sm text-muted-foreground">
+                        john.doe@example.com
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Coming Soon</h3>
-                  <p className="text-gray-400">
-                    The {activeTab} section is under development.
-                  </p>
-                </div>
-              </div>
-            )}
-          </main>
-        </div>
-      </div>
-    </div>
-  );
-};
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm">Focus Score</span>
+                      <span className="text-sm font-semibold">85/100</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm">Current Streak</span>
+                      <span className="text-sm font-semibold">7 days</span>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="w-full mt-4">
+                    View Full Profile
+                  </Button>
+                </CardContent>
+              </Card>
 
-export default Dashboard;
+              {/* Mini Calendar */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    Upcoming Schedule
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {upcomingEvents.map((event, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-2 rounded-lg border"
+                    >
+                      <div className="text-center min-w-[60px]">
+                        <div className="text-xs text-muted-foreground">
+                          {event.date}
+                        </div>
+                        <div className="text-sm font-semibold">
+                          {event.time}
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium">{event.title}</div>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Activity Feed & Shared Resources */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Activity Feed */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>
+                  Your latest actions and achievements
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {recentActivity.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-3 p-2 rounded-lg border-l-2 border-primary/20 bg-muted/30"
+                  >
+                    <div className="w-2 h-2 rounded-full bg-primary"></div>
+                    <span className="text-sm">{activity}</span>
+                  </div>
+                ))}
+                <Button variant="ghost" className="w-full justify-between mt-4">
+                  View all activity
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Shared Resources */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Shared Resources
+                </CardTitle>
+                <CardDescription>
+                  Recently shared files and documents
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {sharedResources.map((resource, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <div className="text-sm font-medium">
+                          {resource.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {resource.room} • {resource.date}
+                        </div>
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="sm">
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button variant="ghost" className="w-full justify-between mt-4">
+                  View all resources
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}

@@ -20,11 +20,11 @@ import axios from "axios";
 import { SIGNUP_API } from "@/api/api";
 import { useRouter } from "next/navigation";
 import MainLoader from "@/components/mainLoader";
+import { useAppContext } from "@/context/AppContext";
 
 const SignupPage = () => {
   const router = useRouter();
-  const [loader, setLoader] = useState(false);
-  const [mainLoader, setMainLoader] = useState(false);
+  const { loader, setLoader, mainLoader, setMainLoader } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -268,8 +268,8 @@ const SignupPage = () => {
             >
               {loader ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
                   Creating Your Account!
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
                 </>
               ) : (
                 <>
