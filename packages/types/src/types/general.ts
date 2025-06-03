@@ -1,7 +1,8 @@
 interface IResponse {
     msg: string;
     token?: string;
-    error?: Error
+    error?: Error;
+    data?: any;
 }
 
-export type {IResponse};
+export type { IResponse };

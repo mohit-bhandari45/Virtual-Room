@@ -11,9 +11,12 @@ import axios from "axios";
 import { LOGIN_API } from "@/api/api";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import MainLoader from "@/components/mainLoader";
 
 const LoginPage = () => {
   const router = useRouter();
+  const [loader, setLoader] = useState(false);
+  const [mainLoader, setMainLoader] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -28,6 +31,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoader(true);
     // remember me is not working
 
     try {
@@ -49,8 +53,15 @@ const LoginPage = () => {
         const msg = error.response.data.msg;
         toast.error(msg);
       }
+    } finally {
+      setLoader(false);
+      setMainLoader(true);
     }
   };
+
+  if (mainLoader) {
+    return <MainLoader msg={"Wait a min!"} />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
@@ -178,10 +189,19 @@ const LoginPage = () => {
             {/* Submit Button */}
             <Button
               type="submit"
-              className="w-full bg-white hover:bg-gray-100 text-black font-semibold h-12 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-lg"
+              className="w-full bg-white hover:bg-gray-100 text-black font-semibold h-12 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Sign In
-              <ArrowRight className="w-5 h-5 ml-2" />
+              {loader ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
+                  Signing In!
+                </>
+              ) : (
+                <>
+                  Sign In
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </>
+              )}
             </Button>
           </form>
 

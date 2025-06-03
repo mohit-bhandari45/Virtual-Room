@@ -31,13 +31,19 @@ model Room{
   roomParticipants RoomParticipant[]
 }
 
+enum ParticipantRole {
+  owner
+  member
+  moderator
+}
+
 model RoomParticipant{
   id String @id @default(uuid())
   room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
   roomId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
-  role String @default("member")
+  role ParticipantRole @default(member)
   joinedAt DateTime @default(now())
 
   @@unique([roomId, userId])

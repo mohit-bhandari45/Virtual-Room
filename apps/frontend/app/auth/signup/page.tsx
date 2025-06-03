@@ -19,9 +19,12 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { SIGNUP_API } from "@/api/api";
 import { useRouter } from "next/navigation";
+import MainLoader from "@/components/mainLoader";
 
 const SignupPage = () => {
   const router = useRouter();
+  const [loader, setLoader] = useState(false);
+  const [mainLoader, setMainLoader] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,6 +46,7 @@ const SignupPage = () => {
       toast.error("Password and Confirm Password do not match");
       return;
     }
+    setLoader(true);
 
     try {
       const data = {
@@ -64,8 +68,15 @@ const SignupPage = () => {
         const msg = error.response.data.msg;
         toast.error(msg);
       }
+    } finally {
+      setLoader(false);
+      setMainLoader(true);
     }
   };
+
+  if (mainLoader) {
+    return <MainLoader msg={"Wait a min!"} />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
@@ -255,8 +266,17 @@ const SignupPage = () => {
               disabled={!formData.acceptTerms}
               className="w-full bg-white hover:bg-gray-100 text-black font-semibold h-12 rounded-xl hover:scale-[1.02] transition-all duration-300 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              Create Account
-              <ArrowRight className="w-5 h-5 ml-2" />
+              {loader ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-600 border-t-transparent mr-2"></div>
+                  Creating Your Account!
+                </>
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </>
+              )}
             </Button>
           </form>
 
