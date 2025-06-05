@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { SIGNUP_API } from "@/api/api";
 import { useRouter } from "next/navigation";
-import MainLoader from "@/components/mainLoader";
+import MainLoader from "@/components/loaders/mainLoader";
 import { useAppContext } from "@/context/AppContext";
 
 const SignupPage = () => {

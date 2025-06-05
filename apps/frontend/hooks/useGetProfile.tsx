@@ -4,8 +4,7 @@ import { IUser } from "@virtualroom/types";
 
 const useGetProfile = () => {
   const [loader, setLoader] = useState(true);
-  const [profile, setProfile] = useState<IUser>(null);
-  const [error, setError] = useState<any>(null);
+  const [profile, setProfile] = useState<IUser | null>(null);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -15,7 +14,6 @@ const useGetProfile = () => {
         setProfile(res.data.data); // assuming response structure is { data: { ... } }
       } catch (err) {
         console.error("Failed to fetch profile", err);
-        setError(err);
       } finally {
         setLoader(false);
       }
@@ -24,7 +22,7 @@ const useGetProfile = () => {
     getUserProfile();
   }, []);
 
-  return { profile, loader, error };
+  return { profile, loader };
 };
 
 export default useGetProfile;

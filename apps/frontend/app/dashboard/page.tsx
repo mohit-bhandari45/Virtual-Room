@@ -1,7 +1,8 @@
 "use client";
 
 import { AppSidebar } from "@/components/app-sidebar";
-import MainLoader from "@/components/mainLoader";
+import MainLoader from "@/components/loaders/mainLoader";
+import CreateRoom from "@/components/roomcomps/create-room";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,33 +21,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Textarea } from "@/components/ui/textarea";
 import useGetProfile from "@/hooks/useGetProfile";
+import useGetRooms from "@/hooks/useGetRooms";
 import {
   Calendar,
   ChevronRight,
@@ -54,46 +36,16 @@ import {
   Edit,
   FileText,
   Flame,
-  Globe,
-  Lock,
-  Plus,
   Target,
   Trash2,
   Users,
   Video,
 } from "lucide-react";
-import { useState } from "react";
 
 export default function Page() {
-  const { loader, profile, error } = useGetProfile();
+  const { loader: profileLoader, profile } = useGetProfile();
+  const { loader: roomLoader, rooms } = useGetRooms();
 
-  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
-  const [roomData, setRoomData] = useState({
-    name: "",
-    description: "",
-    date: "",
-    time: "",
-    participants: "",
-    type: "",
-    privacy: "public", // Default to public
-  });
-
-  const handleCreateRoom = () => {
-    // Handle room creation logic here
-    console.log("Creating room:", roomData);
-    // You can add API call here
-    setIsCreateRoomOpen(false);
-    // Reset form
-    setRoomData({
-      name: "",
-      description: "",
-      date: "",
-      time: "",
-      participants: "",
-      type: "",
-      privacy: "public",
-    });
-  };
   // Mock data for demonstration
   const recentRooms = [
     {
@@ -147,13 +99,13 @@ export default function Page() {
     { date: "Dec 18", time: "10:00 AM", title: "Client Review" },
   ];
 
-  if (loader) {
+  if (profileLoader || roomLoader || !rooms || !profile) {
     return <MainLoader msg={"Wait a min!"} />;
   }
 
   return (
     <SidebarProvider>
-      <AppSidebar profile={profile}/>
+      <AppSidebar profile={profile} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
@@ -180,168 +132,16 @@ export default function Page() {
           {/* Welcome Section & Create Room */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 className="text-3xl font-bold">Welcome back, {profile?.name}!</h1>
+              <h1 className="text-3xl font-bold">
+                Welcome back, {profile?.name}!
+              </h1>
               <p className="text-muted-foreground">
-                Here's what's happening with your rooms and sessions
+                Here&apos;s what&apos;s happening with your rooms and sessions
               </p>
             </div>
 
             {/* Create Room Dialog */}
-            <Dialog open={isCreateRoomOpen} onOpenChange={setIsCreateRoomOpen}>
-              <DialogTrigger asChild>
-                <Button size="lg" className="gap-2">
-                  <Plus className="h-4 w-4" />
-                  Create Room
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>Create New Room</DialogTitle>
-                  <DialogDescription>
-                    Set up a new room for collaboration, meetings, or focus
-                    sessions.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="room-name">Room Name *</Label>
-                    <Input
-                      id="room-name"
-                      placeholder="e.g., Team Standup, Focus Session"
-                      value={roomData.name}
-                      onChange={(e) =>
-                        setRoomData({ ...roomData, name: e.target.value })
-                      }
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="room-description">Description</Label>
-                    <Textarea
-                      id="room-description"
-                      placeholder="Brief description of the room purpose..."
-                      value={roomData.description}
-                      onChange={(e) =>
-                        setRoomData({
-                          ...roomData,
-                          description: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="room-date">Date</Label>
-                      <Input
-                        id="room-date"
-                        type="date"
-                        value={roomData.date}
-                        onChange={(e) =>
-                          setRoomData({ ...roomData, date: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="room-time">Time</Label>
-                      <Input
-                        id="room-time"
-                        type="time"
-                        value={roomData.time}
-                        onChange={(e) =>
-                          setRoomData({ ...roomData, time: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="room-type">Room Type</Label>
-                    <Select
-                      value={roomData.type}
-                      onValueChange={(value) =>
-                        setRoomData({ ...roomData, type: value })
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select room type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="meeting">Meeting Room</SelectItem>
-                        <SelectItem value="focus">Focus Session</SelectItem>
-                        <SelectItem value="collaboration">
-                          Collaboration Space
-                        </SelectItem>
-                        <SelectItem value="presentation">
-                          Presentation Room
-                        </SelectItem>
-                        <SelectItem value="workshop">Workshop</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Privacy Settings */}
-                  <div className="grid gap-3">
-                    <Label>Room Privacy</Label>
-                    <RadioGroup
-                      value={roomData.privacy}
-                      onValueChange={(value) =>
-                        setRoomData({ ...roomData, privacy: value })
-                      }
-                      className="grid grid-cols-2 gap-4"
-                    >
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="public" id="public" />
-                        <div className="flex-1">
-                          <Label
-                            htmlFor="public"
-                            className="flex items-center gap-2 font-medium cursor-pointer"
-                          >
-                            <Globe className="h-4 w-4 text-green-600" />
-                            Public Room
-                          </Label>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Anyone can discover and join this room
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-muted/50 transition-colors">
-                        <RadioGroupItem value="private" id="private" />
-                        <div className="flex-1">
-                          <Label
-                            htmlFor="private"
-                            className="flex items-center gap-2 font-medium cursor-pointer"
-                          >
-                            <Lock className="h-4 w-4 text-orange-600" />
-                            Private Room
-                          </Label>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Only invited participants can join
-                          </p>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                  {/* <div className="grid gap-2">
-                    <Label htmlFor="participants">Invite Participants (Email addresses)</Label>
-                    <Input
-                      id="participants"
-                      placeholder="user1@example.com, user2@example.com"
-                      value={roomData.participants}
-                      onChange={(e) => setRoomData({...roomData, participants: e.target.value})}
-                    />
-                  </div> */}
-                </div>
-                <DialogFooter>
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsCreateRoomOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button onClick={handleCreateRoom} disabled={!roomData.name}>
-                    Create Room
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <CreateRoom />
           </div>
 
           {/* Top Stats Cards */}
@@ -354,7 +154,7 @@ export default function Page() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">12</div>
+                <div className="text-2xl font-bold">{rooms.length}</div>
                 <p className="text-xs text-muted-foreground">
                   +2 from last week
                 </p>

@@ -36,22 +36,25 @@ const data = {
       title: "Home",
       url: "#",
       icon: Home,
-      isActive: true,
+      isActive: false,
     },
     {
       title: "My Rooms",
       url: "#",
       icon: Layers2,
+      isActive: false,
     },
     {
       title: "Schedule",
       url: "#",
       icon: Calendar,
+      isActive: false,
     },
     {
       title: "Settings",
       url: "#",
       icon: Settings2,
+      isActive: false,
     },
   ],
   projects: [

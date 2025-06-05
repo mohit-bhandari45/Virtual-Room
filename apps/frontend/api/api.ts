@@ -31,4 +31,10 @@ const PROFILE_BASE_URL = "/api/user";
 const GET_OWN_PROFILE = `${PROFILE_BASE_URL}/me`;
 export { GET_OWN_PROFILE };
 
+/* Room APIs */
+const ROOM_BASE_URL = "/api/rooms";
+const CREATE_ROOM = `${ROOM_BASE_URL}/create`;
+const GET_ALL_ROOM = `${ROOM_BASE_URL}/me`;
+export { CREATE_ROOM, GET_ALL_ROOM };
+
 export default api;

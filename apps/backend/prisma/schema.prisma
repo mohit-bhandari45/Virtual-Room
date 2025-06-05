@@ -24,6 +24,9 @@ model Room{
   id String @id @default(uuid())
   name String
   description String
+  isPublic Boolean
+  active Boolean
+  duration Int
   createdById String
   createdBy User @relation("RoomCreator", fields: [createdById], references: [id])
   createdAt DateTime @default(now())

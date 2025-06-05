@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 
 async function createRoomHandler(req: Request, res: Response): Promise<void> {
     const userId = req.user?.id;
-    const { name, description } = req.body;
+    const { name, description, duration, isPublic } = req.body;
 
     let response: IResponse = {
         msg: ""
@@ -28,6 +28,9 @@ async function createRoomHandler(req: Request, res: Response): Promise<void> {
                 name,
                 description,
                 createdById: userId,
+                active: true,
+                isPublic: isPublic === "public",
+                duration: duration,
                 roomParticipants: {
                     create: {
                         userId: userId,
@@ -41,9 +44,10 @@ async function createRoomHandler(req: Request, res: Response): Promise<void> {
         });
 
         response.msg = "Room Created Successfully";
-        response.data = room;
+        response.data = room.id;
         res.status(201).json(response);
     } catch (error) {
+        console.log(error);
         response.msg = "Internal Server Error. Please try again!";
         response.error = error as Error;
         res.status(500).json(response);

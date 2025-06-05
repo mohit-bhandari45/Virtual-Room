@@ -5,7 +5,7 @@ import Features from "@/components/landingpagecomps/features";
 import Footer from "@/components/landingpagecomps/footer";
 import HeroSection from "@/components/landingpagecomps/herosection";
 import Navbar from "@/components/landingpagecomps/navbar";
-import MainLoader from "@/components/mainLoader";
+import MainLoader from "@/components/loaders/mainLoader";
 import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -32,7 +32,6 @@ const VirtualRoomLanding: React.FC = () => {
   });
 
   useEffect(() => {
-    setMainLoader(true);
     const token = localStorage.getItem("token");
     if (token) {
       router.push("/dashboard");
