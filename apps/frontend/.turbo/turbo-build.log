@@ -1,0 +1,38 @@
+
+> frontend@0.1.0 build
+> next build
+
+ ⚠ Invalid next.config.ts options detected: 
+ ⚠     Unrecognized key(s) in object: 'appDir' at "experimental"
+ ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+   ▲ Next.js 15.3.2
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 4.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/9) ...
+   Generating static pages (2/9) 
+   Generating static pages (4/9) 
+   Generating static pages (6/9) 
+ ✓ Generating static pages (9/9)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    5.51 kB         107 kB
+├ ○ /_not-found                            975 B         102 kB
+├ ○ /auth/login                          4.54 kB         149 kB
+├ ○ /auth/signup                         4.84 kB         149 kB
+├ ○ /dashboard                           9.39 kB         185 kB
+├ ○ /dashboard/rooms                       390 B         171 kB
+└ ƒ /dashboard/rooms/[roomId]              558 B         102 kB
++ First Load JS shared by all             101 kB
+  ├ chunks/315-d1871bf30d70b6a1.js       46.3 kB
+  ├ chunks/87c73c54-84296000a9dabbb8.js  53.2 kB
+  └ other shared chunks (total)          1.99 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

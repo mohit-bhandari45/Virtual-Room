@@ -43,11 +43,12 @@ const LoginPage = () => {
       const response = await axios.post(LOGIN_API, data);
       if (response.status == 200) {
         const { msg, token } = response.data;
-        console.log(msg, token);
         localStorage.setItem("token", token);
         toast.success(msg);
       }
       router.push("/dashboard");
+      setMainLoader(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);
       if (error.response) {
@@ -56,7 +57,11 @@ const LoginPage = () => {
       }
     } finally {
       setLoader(false);
-      setMainLoader(true);
+      setFormData({
+        email: "",
+        password: "",
+        rememberMe: false,
+      });
     }
   };
 
@@ -259,7 +264,7 @@ const LoginPage = () => {
 
           {/* Sign Up Link */}
           <p className="text-center text-gray-400 mt-6">
-            Don't have an account?{" "}
+            Don&lsquo;t have an account?{" "}
             <Link
               href="/auth/signup"
               className="text-white hover:underline font-medium"

@@ -34,25 +34,25 @@ const data = {
   navMain: [
     {
       title: "Home",
-      url: "#",
+      url: "/dashboard",
       icon: Home,
       isActive: false,
     },
     {
       title: "My Rooms",
-      url: "#",
+      url: "/dashboard/rooms",
       icon: Layers2,
       isActive: false,
     },
     {
       title: "Schedule",
-      url: "#",
+      url: "/dashboard/schedule",
       icon: Calendar,
       isActive: false,
     },
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: Settings2,
       isActive: false,
     },

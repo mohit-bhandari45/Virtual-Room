@@ -1,3 +1,4 @@
+// packages/types/tsconfig.json
 {
     "extends": "../../tsconfig.base.json",
     "compilerOptions": {
@@ -5,9 +6,13 @@
         "declaration": true,
         "declarationMap": true,
         "emitDeclarationOnly": true,
+        "rootDir": "src",
         "outDir": "dist"
     },
     "include": [
-        "src"
-, "src/index.ts"    ]
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

@@ -56,12 +56,15 @@ const SignupPage = () => {
       };
 
       const response = await axios.post(SIGNUP_API, data);
-      if (response.status == 200) {
+      if (response.status == 201) {
         const { msg, token } = response.data;
+        console.log(msg, token);
         localStorage.setItem("token", token);
         toast.success(msg);
       }
+      setMainLoader(true);
       router.push("/dashboard");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);
       if (error.response) {
@@ -70,7 +73,13 @@ const SignupPage = () => {
       }
     } finally {
       setLoader(false);
-      setMainLoader(true);
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        acceptTerms: false,
+      });
     }
   };
 

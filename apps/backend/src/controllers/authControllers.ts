@@ -1,4 +1,4 @@
-import { IResponse } from "@virtualroom/types";
+import { IResponse, IUser } from "@virtualroom/types";
 import { Request, Response } from "express";
 import { prisma } from "@/lib/db";
 import { encode } from "@/utils/jwt";
@@ -44,7 +44,7 @@ async function signUpHandler(req: Request, res: Response): Promise<void> {
             }
         });
 
-        const token = encode(user);
+        const token = encode(user as unknown as IUser);
 
         response.msg = "Signed in Successfully";
         response.token = token;
@@ -85,7 +85,7 @@ async function loginHandler(req: Request, res: Response): Promise<void> {
             return;
         }
 
-        const token = encode(user);
+        const token = encode(user as unknown as IUser);
 
         response.msg = "Logged in Successfully";
         response.token = token;

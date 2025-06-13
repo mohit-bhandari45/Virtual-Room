@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { LucideIcon } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function NavMain({
   items,
@@ -27,6 +27,8 @@ export function NavMain({
       items.map((item) => {
         if (item.title === "Home") {
           item.isActive = true;
+        } else {
+          item.isActive = false;
         }
         return item;
       });
@@ -35,10 +37,14 @@ export function NavMain({
       items.map((item) => {
         if (item.title === "My Rooms") {
           item.isActive = true;
+        } else {
+          item.isActive = false;
         }
         return item;
       });
   }
+
+  const router = useRouter();
 
   return (
     <SidebarGroup>
@@ -54,7 +60,10 @@ export function NavMain({
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  className={`cursor-pointer ${item.isActive ? "shadow" : ""}`}
+                  className={`cursor-pointer ${item.isActive ? "shadow shadow-black" : ""}`}
+                  onClick={() => {
+                    router.push(item.url);
+                  }}
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

@@ -1,10 +1,13 @@
 "use client";
 
-import { IRoomData, valueChecks } from "@/app/rooms/utils";
+import api, { CREATE_ROOM } from "@/api/api";
+import { IRoomData, valueChecks } from "@/app/dashboard/rooms/utils";
 import { useAppContext } from "@/context/AppContext";
 import { Globe, Lock, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import Processing from "../loaders/processing-loader";
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -19,12 +22,13 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
-import Processing from "../loaders/processing-loader";
-import api, { CREATE_ROOM } from "@/api/api";
+import MainLoader from "../loaders/mainLoader";
 
 const CreateRoom = () => {
+  const { mainLoader, setMainLoader } = useAppContext();
   const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
   const { loader, setLoader } = useAppContext();
+  const router = useRouter();
 
   const [roomData, setRoomData] = useState<IRoomData>({
     name: "",
@@ -54,10 +58,13 @@ const CreateRoom = () => {
       };
 
       const response = await api.post(CREATE_ROOM, data);
-    //   const id = response.data.data;
+      const id = response.data.data;
+      console.log(id);
 
-      if(response.status===201){
+      if (response.status === 201) {
+        router.push(`/dashboard/rooms/${id}`);
         toast.success(response.data.msg);
+        setMainLoader(true);
       }
     } catch (error) {
       console.log(error);
@@ -74,6 +81,10 @@ const CreateRoom = () => {
       });
     }
   };
+
+  if (mainLoader) {
+    return <MainLoader msg={"Wait a min!"} />;
+  }
 
   return (
     <Dialog open={isCreateRoomOpen} onOpenChange={setIsCreateRoomOpen}>
@@ -176,7 +187,7 @@ const CreateRoom = () => {
             <RadioGroup
               value={roomData.privacy}
               onValueChange={(value) =>
-                setRoomData({ ...roomData, privacy: value })
+                setRoomData({ ...roomData, privacy: value as ("public" | "private") })
               }
               className="grid grid-cols-2 gap-4"
               required

@@ -6,7 +6,7 @@ import { IRoom } from "@virtualroom/types";
 
 const useGetRooms = () => {
   const [loader, setLoader] = useState(true);
-  const [rooms, setRooms] = useState<IRoom | null>(null);
+  const [rooms, setRooms] = useState<IRoom[] | null>(null);
 
   useEffect(() => {
     const getUserProfile = async () => {

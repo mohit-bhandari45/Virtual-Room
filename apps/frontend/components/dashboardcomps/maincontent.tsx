@@ -2,26 +2,22 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-    Bell,
-    Clock,
-    LogOut,
-    Plus,
-    Search,
-    Settings,
-    Sparkles,
-    TrendingUp,
-    User,
-    Users,
-    Video
+  Bell,
+  LogOut,
+  Plus,
+  Search,
+  Settings,
+  Sparkles,
+  User
 } from "lucide-react";
 import { useState } from "react";
 
@@ -29,64 +25,64 @@ const MainDashBoard = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   // Sample data
-  const recentRooms = [
-    {
-      id: "1",
-      name: "Team Standup",
-      participants: 8,
-      status: "active",
-      created: "2 hours ago",
-      type: "meeting",
-      isPublic: false,
-    },
-    {
-      id: "2",
-      name: "Product Demo",
-      participants: 15,
-      status: "scheduled",
-      created: "1 day ago",
-      type: "presentation",
-      isPublic: true,
-    },
-    {
-      id: "3",
-      name: "Code Review Session",
-      participants: 5,
-      status: "ended",
-      created: "3 days ago",
-      type: "collaboration",
-      isPublic: false,
-    },
-    {
-      id: "4",
-      name: "Client Meeting",
-      participants: 3,
-      status: "active",
-      created: "1 hour ago",
-      type: "meeting",
-      isPublic: false,
-    },
-  ];
+  // const recentRooms = [
+  //   {
+  //     id: "1",
+  //     name: "Team Standup",
+  //     participants: 8,
+  //     status: "active",
+  //     created: "2 hours ago",
+  //     type: "meeting",
+  //     isPublic: false,
+  //   },
+  //   {
+  //     id: "2",
+  //     name: "Product Demo",
+  //     participants: 15,
+  //     status: "scheduled",
+  //     created: "1 day ago",
+  //     type: "presentation",
+  //     isPublic: true,
+  //   },
+  //   {
+  //     id: "3",
+  //     name: "Code Review Session",
+  //     participants: 5,
+  //     status: "ended",
+  //     created: "3 days ago",
+  //     type: "collaboration",
+  //     isPublic: false,
+  //   },
+  //   {
+  //     id: "4",
+  //     name: "Client Meeting",
+  //     participants: 3,
+  //     status: "active",
+  //     created: "1 hour ago",
+  //     type: "meeting",
+  //     isPublic: false,
+  //   },
+  // ];
 
-  const stats = [
-    { label: "Total Rooms", value: "24", change: "+12%", icon: Video },
-    { label: "Active Users", value: "156", change: "+8%", icon: Users },
-    { label: "Hours Hosted", value: "89", change: "+23%", icon: Clock },
-    { label: "This Week", value: "12", change: "+5%", icon: TrendingUp },
-  ];
+  // const stats = [
+  //   { label: "Total Rooms", value: "24", change: "+12%", icon: Video },
+  //   { label: "Active Users", value: "156", change: "+8%", icon: Users },
+  //   { label: "Hours Hosted", value: "89", change: "+23%", icon: Clock },
+  //   { label: "This Week", value: "12", change: "+5%", icon: TrendingUp },
+  // ];
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "scheduled":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "ended":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
-  };
+  // const getStatusColor = (status: string) => {
+  //   switch (status) {
+  //     case "active":
+  //       return "bg-green-500/20 text-green-400 border-green-500/30";
+  //     case "scheduled":
+  //       return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+  //     case "ended":
+  //       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  //     default:
+  //       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-black text-white">
