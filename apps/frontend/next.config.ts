@@ -1,7 +1,7 @@
 import path from "path";
 
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   experimental: {
     appDir: true, // if using App Router
   },

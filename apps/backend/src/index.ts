@@ -1,38 +1,9 @@
-import app from "./app";
+import server from "./app";
 import os from "os";
 
 const PORT = Number(process.env.PORT) || 4000;
 
-app.get("/", (req, res): void => {
-  const up = Math.floor(os.uptime() / 3600);
-  const totalMem = os.totalmem() / (1024 * 1024 * 1024);
-  const freeMem = os.freemem() / (1024 * 1024 * 1024);
-  const usedMem = totalMem - freeMem;
-
-  const memUsagePercent = (usedMem / totalMem) * 100;
-  const cpuLoad = os.loadavg()[0];
-
-  const serverStatus = {
-    msg: "Server is up and running",
-    uptime: up + "Hrs",
-    memory: {
-      totalMemory: totalMem.toFixed(2) + "GiB",
-      usedMemory: usedMem.toFixed(2) + "GiB",
-      freeMemory: freeMem.toFixed(2) + "GiB",
-      memoryUsagePercentage: memUsagePercent.toFixed(2) + "%",
-    },
-    cpu: {
-      load: cpuLoad,
-    },
-    platform: os.platform(),
-    arch: os.arch(),
-    hostname: os.hostname(),
-  };
-
-  res.json(serverStatus);
-});
-
-app.listen(PORT, "0.0.0.0", () => {
+server.listen(PORT, "0.0.0.0", () => {
   const interfaces = os.networkInterfaces();
   const addresses: string[] = [];
 

@@ -58,7 +58,6 @@ const SignupPage = () => {
       const response = await axios.post(SIGNUP_API, data);
       if (response.status == 201) {
         const { msg, token } = response.data;
-        console.log(msg, token);
         localStorage.setItem("token", token);
         toast.success(msg);
       }

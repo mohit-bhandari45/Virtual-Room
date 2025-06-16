@@ -1,1 +1,10 @@
-{"version":3,"file":"room.d.ts","sourceRoot":"","sources":["../../src/types/room.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,KAAK;IACrB,EAAE,EAAE,MAAM,CAAC;IACX,IAAI,EAAC,MAAM,CAAC;IACZ,WAAW,EAAC,MAAM,CAAC;IACnB,QAAQ,EAAE,OAAO,CAAC;IAClB,MAAM,EAAE,OAAO,CAAC;IAChB,QAAQ,EAAC,MAAM,CAAC;IAChB,WAAW,EAAE,MAAM,CAAC;IACpB,SAAS,EAAE,IAAI,CAAC;CAChB"}
+{
+  "version": 3,
+  "file": "room.d.ts",
+  "sourceRoot": "",
+  "sources": [
+    "../../src/types/room.ts"
+  ],
+  "names": [],
+  "mappings": "AAAA,MAAM,WAAW,KAAK;IACrB,EAAE,EAAE,MAAM,CAAC;IACX,IAAI,EAAC,MAAM,CAAC;IACZ,WAAW,EAAC,MAAM,CAAC;IACnB,QAAQ,EAAE,OAAO,CAAC;IAClB,MAAM,EAAE,OAAO,CAAC;IAChB,QAAQ,EAAC,MAAM,CAAC;IAChB,WAAW,EAAE,MAAM,CAAC;IACpB,SAAS,EAAE,IAAI,CAAC;CAChB"
+}

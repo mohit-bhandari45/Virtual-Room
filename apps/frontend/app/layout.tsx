@@ -1,7 +1,8 @@
+import { AppProvider } from "@/context/AppContext";
+import { PeerProvider } from "@/context/PeerContext";
 import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
-import { AppProvider } from "@/context/AppContext";
 
 export const metadata: Metadata = {
   title: "VirtRoom",
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         <Toaster />
-        <AppProvider>{children}</AppProvider>
+        <PeerProvider>
+          <AppProvider>{children}</AppProvider>
+        </PeerProvider>
       </body>
     </html>
   );

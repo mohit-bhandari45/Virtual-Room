@@ -31,15 +31,16 @@
     "react-hot-toast": "^2.5.2",
     "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@virtualroom/types": "*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@virtualroom/types": "*",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "tailwindcss": "^4",

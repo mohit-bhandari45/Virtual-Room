@@ -7,7 +7,7 @@ import { IUser } from "@virtualroom/types";
 const useGetProfile = () => {
   const [loader, setLoader] = useState(true);
   const [profile, setProfile] = useState<IUser | null>(null);
-
+  
   useEffect(() => {
     const getUserProfile = async () => {
       try {

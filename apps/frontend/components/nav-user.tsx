@@ -42,8 +42,8 @@ export function NavUser({ user }: { user: IUser }) {
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.avatar} alt={user.name!} />
                 <AvatarFallback className="rounded-lg">
-                  {user.name?.split(" ")[0].charAt(0).toUpperCase()}
-                  {user.name?.split(" ")[1].charAt(0).toUpperCase()}
+                  {user.name?.split(" ")[0]?.charAt(0).toUpperCase()}
+                  {user.name?.split(" ")[1]?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

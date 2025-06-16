@@ -3,6 +3,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import MainLoader from "@/components/loaders/mainLoader";
 import CreateRoom from "@/components/roomcomps/create-room";
+import JoinRoom from "@/components/roomcomps/join-room";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -141,7 +142,10 @@ export default function Page() {
             </div>
 
             {/* Create Room Dialog */}
-            <CreateRoom />
+            <div className="flex gap-5">
+              <JoinRoom />
+              <CreateRoom />
+            </div>
           </div>
 
           {/* Top Stats Cards */}

@@ -19,9 +19,7 @@ export function valueChecks(roomData: IRoomData): IReturnValue {
         status: false,
         field: ""
     };
-
-    console.log(roomData);
-
+    
     if (roomData.name === "") {
         response.msg = "Name should not be empty";
         response.field = "name";
