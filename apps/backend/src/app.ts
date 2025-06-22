@@ -6,6 +6,7 @@ import cors from "cors";
 import http from "http";
 import setupSocketIO from "./socket";
 import os from "os";
+import startRoomDeactivateCron from "./cron/deactivateRoom";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 setupSocketIO(server);
+startRoomDeactivateCron();
 
 /* Routes */
 app.get("/", (req, res): void => {

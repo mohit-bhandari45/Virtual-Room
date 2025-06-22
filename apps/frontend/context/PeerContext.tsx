@@ -1,16 +1,21 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState
+} from "react";
 
 type PeerContextType = {
-  peer: RTCPeerConnection | void;
+  peer: RTCPeerConnection;
   handleCreateOffer: () => Promise<RTCSessionDescriptionInit>;
   handleCreateAnswer: (
     offer: RTCSessionDescriptionInit
   ) => Promise<RTCSessionDescriptionInit>;
-  handleSetRemoteAnswer: (
-    offer: RTCSessionDescriptionInit
-  ) => void;
+  handleSetRemoteAnswer: (offer: RTCSessionDescriptionInit) => void;
+  sendStream: (stream: MediaStream | null) => void;
+  remoteStream: MediaStream | null;
 };
 
 const PeerContext = React.createContext<PeerContextType | null>(null);
@@ -20,6 +25,8 @@ type PeerProviderProps = {
 };
 
 export const PeerProvider = (props: PeerProviderProps) => {
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
+
   const peer = new RTCPeerConnection({
     iceServers: [
       {
@@ -45,6 +52,26 @@ export const PeerProvider = (props: PeerProviderProps) => {
     await peer.setRemoteDescription(ans);
   };
 
+  const sendStream = async (stream: MediaStream | null) => {
+    if(!stream) return;
+    
+    stream.getTracks().forEach((track) => {
+      peer.addTrack(track, stream);
+    });
+  };
+
+  const handleTrackEvent = useCallback((event) => {
+    setRemoteStream(event.streams[0]);
+  }, []);
+
+  useEffect(() => {
+    peer.addEventListener("track", handleTrackEvent);
+
+    return () => {
+      peer.removeEventListener("track", handleTrackEvent);
+    };
+  }, [handleTrackEvent, peer]);
+
   return (
     <PeerContext.Provider
       value={{
@@ -52,6 +79,8 @@ export const PeerProvider = (props: PeerProviderProps) => {
         handleCreateOffer,
         handleCreateAnswer,
         handleSetRemoteAnswer,
+        sendStream,
+        remoteStream,
       }}
     >
       {props.children}

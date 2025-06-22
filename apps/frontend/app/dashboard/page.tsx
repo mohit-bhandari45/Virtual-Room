@@ -42,10 +42,16 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import { GetStreakReturnValue, getStreaks } from "./utils";
+import { useEffect, useState } from "react";
 
 export default function Page() {
   const { loader: profileLoader, profile } = useGetProfile();
   const { loader: roomLoader, rooms } = useGetRooms();
+  const [streakData, setStreakData] = useState<GetStreakReturnValue>({
+    maxStreak: 0,
+    currentStreak: 0,
+  });
 
   // Mock data for demonstration
   const recentRooms = [
@@ -99,6 +105,13 @@ export default function Page() {
     { date: "Tomorrow", time: "2:00 PM", title: "Project Planning" },
     { date: "Dec 18", time: "10:00 AM", title: "Client Review" },
   ];
+
+  useEffect(() => {
+    if (rooms) {
+      const data = getStreaks(rooms);
+      setStreakData(data);
+    }
+  }, [rooms]);
 
   if (profileLoader || roomLoader || !rooms || !profile) {
     return <MainLoader msg={"Wait a min!"} />;
@@ -182,10 +195,27 @@ export default function Page() {
                 <Flame className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">7</div>
-                <p className="text-xs text-muted-foreground">Days active</p>
+                <div className="flex items-center justify-between gap-6">
+                  {/* Current Streak */}
+                  <div className="flex-1 text-center">
+                    <div className="text-2xl font-bold">{streakData.currentStreak}</div>
+                    <p className="text-xs text-muted-foreground">Days active</p>
+                  </div>
+
+                  {/* Separator */}
+                  <div className="h-13 text-6xl font-light relative bottom-1">
+                    /
+                  </div>
+
+                  {/* Max Streak */}
+                  <div className="flex-1 text-center">
+                    <div className="text-2xl font-bold">{streakData.maxStreak}</div>
+                    <p className="text-xs text-muted-foreground">Max streak</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Upcoming</CardTitle>
