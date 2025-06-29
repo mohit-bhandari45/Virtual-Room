@@ -1,15 +1,13 @@
+import { initializePassport } from "@/lib/passport";
+import apiRouter from "@/routes/apis";
+import authRouter from "@/routes/auth";
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import authRouter from "@/routes/auth";
-import apiRouter from "@/routes/apis";
-import cors from "cors";
 import http from "http";
-import setupSocketIO from "./socket";
 import os from "os";
 import startRoomDeactivateCron from "./cron/deactivateRoom";
-import session from "express-session";
-import passport from "passport";
-import { initializePassport } from "@/lib/passport";
+import setupSocketIO from "./socket";
 
 dotenv.config();
 
@@ -53,17 +51,6 @@ app.get("/", (req, res): void => {
 
 app.use(express.json());
 app.use(cors());
-
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "aaksh",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false }, // Set to true if using HTTPS
-  })
-);
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use("/auth", authRouter);
 app.use("/api", apiRouter);
