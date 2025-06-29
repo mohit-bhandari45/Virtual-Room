@@ -7,8 +7,13 @@ import http from "http";
 import setupSocketIO from "./socket";
 import os from "os";
 import startRoomDeactivateCron from "./cron/deactivateRoom";
+import session from "express-session";
+import passport from "passport";
+import { initializePassport } from "@/lib/passport";
 
 dotenv.config();
+
+initializePassport();
 
 /* Variables */
 const app = express();
@@ -48,6 +53,17 @@ app.get("/", (req, res): void => {
 
 app.use(express.json());
 app.use(cors());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "aaksh",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Set to true if using HTTPS
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/auth", authRouter);
 app.use("/api", apiRouter);

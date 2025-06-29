@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { SIGNUP_API } from "@/api/api";
+import { SIGNUP_API, BASE_URL } from "@/apis/api";
 import { useRouter } from "next/navigation";
 import MainLoader from "@/components/loaders/mainLoader";
 import { useAppContext } from "@/context/AppContext";
@@ -301,6 +301,9 @@ const SignupPage = () => {
               type="button"
               variant="outline"
               className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 h-12 rounded-xl backdrop-blur-sm"
+              onClick={() => {
+                window.location.href = `${BASE_URL}/auth/google`;
+              }}
             >
               <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path
