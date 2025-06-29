@@ -26,11 +26,18 @@
   },
   "homepage": "https://github.com/mohit-bhandari45/Virtual-Room#readme",
   "devDependencies": {
+    "@types/passport-google-oauth20": "^2.0.16",
+    "tsx": "^4.20.3",
     "turbo": "^2.5.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "@types/express-session": "^1.18.2",
+    "@types/passport": "^1.0.17",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "prisma": "^6.8.2"
   }
 }

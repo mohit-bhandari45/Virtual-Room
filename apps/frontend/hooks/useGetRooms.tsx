@@ -1,6 +1,6 @@
 "use client";
 
-import api, { GET_ALL_ROOM } from "@/api/api";
+import api, { GET_ALL_ROOM } from "@/apis/api";
 import { useEffect, useState } from "react";
 import { IRoom } from "@virtualroom/types";
 

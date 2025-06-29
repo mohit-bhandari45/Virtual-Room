@@ -1,6 +1,6 @@
 "use client";
 
-import api, { CREATE_ROOM } from "@/api/api";
+import api, { CREATE_ROOM } from "@/apis/api";
 import { IRoomData, valueChecks } from "@/app/dashboard/rooms/utils";
 import { useAppContext } from "@/context/AppContext";
 import { Globe, Lock, Plus } from "lucide-react";

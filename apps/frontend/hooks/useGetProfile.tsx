@@ -1,6 +1,6 @@
 "use client";
 
-import api, { GET_OWN_PROFILE } from "@/api/api";
+import api, { GET_OWN_PROFILE } from "@/apis/api";
 import { useEffect, useState } from "react";
 import { IUser } from "@virtualroom/types";
 

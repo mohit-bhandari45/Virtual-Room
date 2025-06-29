@@ -26,9 +26,11 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { IUser } from "@virtualroom/types";
+import { useRouter } from "next/navigation";
 
 export function NavUser({ user }: { user: IUser }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -94,7 +96,12 @@ export function NavUser({ user }: { user: IUser }) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                localStorage.removeItem("token");
+                router.push("/auth/login");
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

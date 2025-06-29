@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
-import { LOGIN_API } from "@/api/api";
+import { LOGIN_API, BASE_URL } from "@/apis/api";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import MainLoader from "@/components/loaders/mainLoader";
 import { useAppContext } from "@/context/AppContext";
 
 const LoginPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { loader, setLoader, mainLoader, setMainLoader } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -23,6 +24,15 @@ const LoginPage = () => {
     password: "",
     rememberMe: false,
   });
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+      setMainLoader(true);
+      router.push("/dashboard");
+    }
+  }, [searchParams, router, setMainLoader]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -224,6 +234,9 @@ const LoginPage = () => {
               type="button"
               variant="outline"
               className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 h-12 rounded-xl backdrop-blur-sm"
+              onClick={() => {
+                window.location.href = `${BASE_URL}/auth/google`;
+              }}
             >
               <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
                 <path
