@@ -2,11 +2,14 @@
 
 import { usePeer } from "@/context/PeerContext";
 import { useSocket } from "@/context/SocketContext";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+import { Mic,MicOff,Video,VideoOff,LogOut} from "lucide-react";
+import { url } from "inspector";
 
 const Room = () => {
+  const router=useRouter()
   const { roomId } = useParams();
   const { socket } = useSocket();
   const [myStream, setMyStream] = useState<MediaStream | null>(null);
@@ -74,6 +77,9 @@ const Room = () => {
   //   };
   // }, [peer, remoteEmailId, socket]);
 
+  const [micOn, setMicOn] = useState(true);
+  const [camOn, setCamOn] = useState(true);
+
   useEffect(() => {
     const getUserMedia = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -87,8 +93,31 @@ const Room = () => {
     getUserMedia();
   }, [sendStream]);
 
+  // Toggle Mic
+const toggleMic = () => {
+  const audioTrack = myStream?.getAudioTracks()[0];
+  console.log("Mic is now", audioTrack!.enabled ? "on" : "off");
+  if (audioTrack) {
+    audioTrack.enabled = !audioTrack.enabled;
+    setMicOn(audioTrack.enabled);
+  }
+};
+
+// Toggle Camera
+const toggleCam = () => {
+  const videoTrack = myStream?.getVideoTracks()[0];
+  if (videoTrack) {
+    videoTrack.enabled = !videoTrack.enabled;
+    setCamOn(videoTrack.enabled);
+  }
+};
+
+
+
+
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-black">
+      
       {/* {remoteEmailId ? (
         <h1>You are connected to {remoteEmailId}</h1>
       ) : (
@@ -98,20 +127,55 @@ const Room = () => {
       {remoteEmailId && <Button onClick={()=>{
         sendStream(myStream);
       }}>Start sharing!</Button>} */} 
-      <ReactPlayer
-        url={myStream as MediaStream}
-        playing
-        playsInline
-        muted
-        className="border rounded w-full max-w-md"
-      ></ReactPlayer>
-      <ReactPlayer
-        url={remoteStream as MediaStream}
-        playing
-        muted
-        playsInline
-        className="border rounded w-full max-w-md"
-      ></ReactPlayer>
+      <div className="flex flex-col md:flex-row gap-8 items-center justify-center w-full max-w-4xl">
+        <ReactPlayer
+          url={myStream as MediaStream}
+          playing
+          playsInline
+          muted
+          className="border-2 border-white rounded-lg w-full max-w-md aspect-video bg-black"
+        ></ReactPlayer>
+        <ReactPlayer
+          url={remoteStream as MediaStream}
+          playing
+          muted
+          playsInline
+          className="border-2 border-white rounded-lg w-full max-w-md aspect-video bg-black"
+        ></ReactPlayer>
+      </div>
+
+      <div className="fixed bottom-15 rounded-4xl border-2 border-white px-6 ">
+        <div className="flex justify-center gap-4 p-4 bg-black bg-opacity-60 rounded-xl">
+          <button
+            onClick={toggleMic}
+            className={`p-3 rounded-full hover:scale-105 transition ${
+              micOn ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {micOn ? <Mic className="text-white" /> : <MicOff className="text-white" />}
+          </button>
+
+          <button
+            onClick={toggleCam}
+            className={`p-3 rounded-full hover:scale-105 transition ${
+              camOn ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {camOn ? <Video className="text-white" /> : <VideoOff className="text-white" />}
+          </button>
+
+          <button
+            onClick={() =>{
+              alert("room left");
+              router.push('/dashboard');
+            }}
+            className="p-3 rounded-full bg-red-700 hover:bg-red-800 transition"
+          >
+            <LogOut className="text-white" />
+          </button>
+
+        </div>
+      </div>
     </div>
   );
 };
