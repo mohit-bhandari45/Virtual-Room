@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/db";
+import { fetchFocusTime } from "@/utils/dashboardUtils";
 import { IResponse } from "@virtualroom/types";
 import { Request, Response } from "express";
 
-async function getOwnDetailsHandler(req: Request, res: Response): Promise<void> {
+async function getDashBoardHandler(req: Request, res: Response): Promise<void> {
     const userId = req.user?.id;
     let response: IResponse = {
         msg: ""
@@ -21,8 +22,21 @@ async function getOwnDetailsHandler(req: Request, res: Response): Promise<void> 
             },
         });
 
+        if (!user) {
+            response.msg = "User Not found";
+            res.status(404).json(response);
+            return;
+        }
+
+        const focusTime = await fetchFocusTime(user.id);
+
+        const dashBoardData = {
+            ...user,
+            focusTime: focusTime
+        };
+
         response.msg = "Got The User";
-        response.data = user;
+        response.data = dashBoardData;
         res.status(200).json(response);
         return;
     } catch (error) {
@@ -32,4 +46,4 @@ async function getOwnDetailsHandler(req: Request, res: Response): Promise<void> 
     }
 }
 
-export { getOwnDetailsHandler };
+export { getDashBoardHandler };

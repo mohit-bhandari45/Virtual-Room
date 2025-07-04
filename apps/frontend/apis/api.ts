@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost:4000";
 /* Auth APIs */
 const SIGNUP_API = `${BASE_URL}/auth/signup`;
 const LOGIN_API = `${BASE_URL}/auth/login`;
-export { SIGNUP_API, LOGIN_API, BASE_URL  };
+export { SIGNUP_API, LOGIN_API, BASE_URL };
 
 const api = axios.create({
     baseURL: BASE_URL,
@@ -27,9 +27,9 @@ api.interceptors.request.use(
 );
 
 /* Api APIs */
-const PROFILE_BASE_URL = "/api/user";
-const GET_OWN_PROFILE = `${PROFILE_BASE_URL}/me`;
-export { GET_OWN_PROFILE };
+const DASHBOARD_BASE_URL = "/api/dashboard";
+const GET_OWN_DASHBOARD = `${DASHBOARD_BASE_URL}`;
+export { GET_OWN_DASHBOARD };
 
 /* Room APIs */
 const ROOM_BASE_URL = "/api/rooms";

@@ -21,7 +21,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { IUser } from "@virtualroom/types";
 
 // This is sample data.
 const data = {
@@ -77,9 +76,8 @@ const data = {
 };
 
 export function AppSidebar({
-  profile,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { profile: IUser }) {
+}: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -89,7 +87,7 @@ export function AppSidebar({
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={profile} />
+        <NavUser/>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

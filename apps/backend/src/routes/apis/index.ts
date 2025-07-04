@@ -1,12 +1,14 @@
 import { Router } from "express";
-import roomRouter from "./room";
-import userRouter from "./user";
+import roomRoutes from "./roomRoutes";
+import userRoutes from "./userRoutes";
+import dashBoardRoutes from "./dashBoardRoutes";
 import { tokenCheckMiddlware } from "@/middleware/auth";
 
 const router = Router();
 router.use(tokenCheckMiddlware);
 
-router.use("/rooms", roomRouter);
-router.use("/user", userRouter);
+router.use("/rooms", roomRoutes);
+router.use("/dashboard", dashBoardRoutes);
+router.use("/user", userRoutes);
 
 export default router;

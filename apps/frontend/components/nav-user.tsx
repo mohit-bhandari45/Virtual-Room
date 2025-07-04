@@ -25,12 +25,13 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { IUser } from "@virtualroom/types";
 import { useRouter } from "next/navigation";
+import { useDashboard } from "@/context/DashboardContext";
 
-export function NavUser({ user }: { user: IUser }) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { data: user } = useDashboard();
 
   return (
     <SidebarMenu>

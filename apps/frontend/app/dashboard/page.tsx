@@ -28,7 +28,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import useGetProfile from "@/hooks/useGetProfile";
+import { useDashboard } from "@/context/DashboardContext";
 import useGetRooms from "@/hooks/useGetRooms";
 import {
   Calendar,
@@ -42,11 +42,11 @@ import {
   Users,
   Video,
 } from "lucide-react";
-import { GetStreakReturnValue, getStreaks } from "./utils";
 import { useEffect, useState } from "react";
+import { GetStreakReturnValue, getStreaks } from "./utils";
 
 export default function Page() {
-  const { loader: profileLoader, profile } = useGetProfile();
+  const { loader: dashboardLoader, data } = useDashboard();
   const { loader: roomLoader, rooms } = useGetRooms();
   const [streakData, setStreakData] = useState<GetStreakReturnValue>({
     maxStreak: 0,
@@ -113,13 +113,13 @@ export default function Page() {
     }
   }, [rooms]);
 
-  if (profileLoader || roomLoader || !rooms || !profile) {
+  if (dashboardLoader || roomLoader || !rooms || !data) {
     return <MainLoader msg={"Wait a min!"} />;
   }
 
   return (
     <SidebarProvider>
-      <AppSidebar profile={profile} />
+      <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">
@@ -147,7 +147,7 @@ export default function Page() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
               <h1 className="text-3xl font-bold">
-                Welcome back, {profile?.name}!
+                Welcome back, {data?.name}!
               </h1>
               <p className="text-muted-foreground">
                 Here&apos;s what&apos;s happening with your rooms and sessions
@@ -163,6 +163,7 @@ export default function Page() {
 
           {/* Top Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -177,6 +178,7 @@ export default function Page() {
                 </p>
               </CardContent>
             </Card>
+
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">
@@ -185,10 +187,11 @@ export default function Page() {
                 <Target className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">24h</div>
+                <div className="text-2xl font-bold">{data.focusTime}h</div>
                 <p className="text-xs text-muted-foreground">This week</p>
               </CardContent>
             </Card>
+            
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Streak</CardTitle>
@@ -198,7 +201,9 @@ export default function Page() {
                 <div className="flex items-center justify-between gap-6">
                   {/* Current Streak */}
                   <div className="flex-1 text-center">
-                    <div className="text-2xl font-bold">{streakData.currentStreak}</div>
+                    <div className="text-2xl font-bold">
+                      {streakData.currentStreak}
+                    </div>
                     <p className="text-xs text-muted-foreground">Days active</p>
                   </div>
 
@@ -209,7 +214,9 @@ export default function Page() {
 
                   {/* Max Streak */}
                   <div className="flex-1 text-center">
-                    <div className="text-2xl font-bold">{streakData.maxStreak}</div>
+                    <div className="text-2xl font-bold">
+                      {streakData.maxStreak}
+                    </div>
                     <p className="text-xs text-muted-foreground">Max streak</p>
                   </div>
                 </div>
